@@ -17,6 +17,8 @@ import android.view.SurfaceHolder;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static com.eliotshekhtman.clickerquest.textphemeral.colorName;
+
 public class Quest extends AppCompatActivity {
 
     GameView gameView;
@@ -28,6 +30,7 @@ public class Quest extends AppCompatActivity {
     float tapy;
 
     ArrayList<mon> monsterList = new ArrayList<mon>();
+    ArrayList<ephemeral> ephemerals = new ArrayList<ephemeral>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,9 +118,9 @@ public class Quest extends AppCompatActivity {
         // Everything that needs to be updated goes in here
         public void update() {
             // If you died, no need to update anything
-            if(MainActivity.player.getHealth() <= 0) return;
+            //if(MainActivity.player.getHealth() <= 0) return;
             // If tap, chance for monster spawning, you moving, or you attacking
-            if(tap) {
+            if(tap & MainActivity.player.getHealth() > 0) {
                 tap = false;
                 // 3.0/16 * getScreenWidth, +=getScreenHeight * 3.0/5
                 if(Math.sqrt(Math.pow(tapx - 3.0/16 * getScreenWidth(),2) + Math.pow(tapy - (3.0/8 * getScreenWidth() + 3.0/5 * getScreenHeight()),2)) <= getScreenWidth() / 8) {
@@ -135,8 +138,10 @@ public class Quest extends AppCompatActivity {
                     mon m = monsterList.get(i);
                     double change = Math.sqrt((tapx - m.getXpos()) * (tapx - m.getXpos()) + (tapy - m.getZpos()) * (tapy - m.getZpos()));
                     if(change <= m.getSize()) {
-                        boolean b = m.getHit(MainActivity.player.attack());
-                        Log.d("Hit", change + "");
+                        int attack = MainActivity.player.attack();
+                        ephemerals.add(new damageText(attack, tapx, tapy, context));
+                        boolean b = m.getHit(attack);
+                        //Log.d("Hit", change + "");
                         if(!b) {
                             MainActivity.player.collectResources(m.getResources());
                             monsterList.remove(m); i--;
@@ -152,6 +157,14 @@ public class Quest extends AppCompatActivity {
                 mon z = Spawner.spawnMonster(m.getName(), MainActivity.player.getLatest_score(), context);
                 if(z != null)
                     monsterList.add(z);
+            }
+            // Update the ephemerals, and remove if they're older than their scope
+            for(int i = 0; i < ephemerals.size(); i++) {
+                ephemeral e = ephemerals.get(i);
+                boolean b = e.update(fps);
+                //Log.d("EPHEMERALS BEFORE", ephemerals.size() + " " + e.spawned + " " + System.currentTimeMillis());
+                if(!b) { ephemerals.remove(e); i--; }
+                //Log.d("EPHEMERALS AFTER", ephemerals.size() + "");
             }
             // Make sure the game knows what stage you're in (forest, etc.)
             //distance = (double) ((int) (distance * 10)) / 10.0;
@@ -172,6 +185,18 @@ public class Quest extends AppCompatActivity {
                 // Draw enemy's position
                 for(mon m: monsterList) {
                     canvas.drawBitmap(m.getPic(), m.getXpos() /*- m.getSize()/2*/, m.getZpos() /*- m.getSize()/2*/, paint);
+                }
+                //canvas.drawText(ephemerals.size() + " !", getScreenWidth() / 2, getScreenHeight() / 2, paint);
+                // Draw ephemerals over the creatures
+                for(ephemeral e: ephemerals) {
+                    //canvas.drawText("GOODBYE", getScreenWidth() / 2, getScreenHeight() / 2, paint);
+                    if(e instanceof textphemeral) {
+                        //Log.d("EPHEMERAL DRAW", ((textphemeral) e).getText());
+                        textphemeral t = (textphemeral) e;
+                        paint.setColor(t.interpretColor());
+                        paint.setTextSize(t.getSize());
+                        canvas.drawText(t.getText(), t.getXpos(), t.getYpos(), paint);
+                    }
                 }
                 paint.setStrokeWidth(50);
                 int radius = (int) (getScreenWidth() / 8);
