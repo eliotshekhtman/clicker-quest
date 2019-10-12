@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/goldView_enh"
+        android:textSize="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="GOLD: ----" />
+
+    <TextView
+        android:id="@+id/priceView_enh"
+        android:textSize="32dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/goldView_enh"
+        android:text="PRICE: ----" />
+
+    <Button
+        android:id="@+id/healthButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:onClick="buyHealth"
+        android:text="HEALTH" />
+
+    <TextView
+        android:id="@+id/healthView"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/healthButton"
+        android:layout_alignBaseline="@id/healthButton"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/speedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/healthButton"
+        android:onClick="buySpeed"
+        android:text="SPEED" />
+
+    <TextView
+        android:id="@+id/speedView"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/speedButton"
+        android:layout_below="@id/healthView"
+        android:layout_alignBaseline="@id/speedButton"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/back_enh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:onClick="goBack"
+        android:text="RETURN TO MARKET" />
+</RelativeLayout>

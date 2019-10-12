@@ -1,6 +1,7 @@
 package com.eliotshekhtman.clickerquest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
@@ -19,8 +20,8 @@ public class Market extends AppCompatActivity {
     final Context context = this;
     float tapx;
     float tapy;
-    final long[] center_enh = new long[] {(long)(18.0/100*getScreenWidth()),(long)(0.5*getScreenHeight())};
-    final long[] center_bla = new long[] {(long)(54.0/100*getScreenWidth()), (long)(90.0/200*getScreenHeight())};
+    final long[] center_enh = new long[] {(long)((18.0/100)*getScreenWidth()),(long)(0.5*getScreenHeight())};
+    final long[] center_bla = new long[] {(long)((54.0/100)*getScreenWidth()), (long)(90.0/200*getScreenHeight())};
     final long[] center_res = new long[] {(long)(85.0/100*getScreenWidth()),(long)(0.5*getScreenHeight())};
     final long[] width_and_height = new long[] {getScreenWidth()/10,getScreenHeight()/10};
 
@@ -28,7 +29,7 @@ public class Market extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market);
-        tapx = 1; tapy = 0;
+        tapx = (-1) * getScreenWidth(); tapy = (-1) * getScreenHeight();
         // Initialize gameView and set it as the view
         gameView = new GameView(this);
         setContentView(gameView);
@@ -107,17 +108,27 @@ public class Market extends AppCompatActivity {
 
         // Everything that needs to be updated goes in here
         public void update() {
-            if(tapx <= Math.abs(center_enh[0]-width_and_height[0]) & tapy <= Math.abs(center_enh[1]-width_and_height[1])) {
-                //Intent intent = new Intent(getBaseContext(), Enhancement_tent.class);
-                //startActivity(intent);
+            if(tap && (tapx >= (center_enh[0]-width_and_height[0]) & tapx <= (width_and_height[0] + center_enh[0])) & (tapy >= (center_enh[1]-width_and_height[1]) & tapy <= (center_enh[1]+width_and_height[1]))) {
+                tap = false;
+                Intent intent = new Intent(getBaseContext(), Enhancement_tent.class);
+                startActivity(intent);
             }
-            if(tapx <= Math.abs(center_bla[0]-width_and_height[0]) & tapy <= Math.abs(center_bla[1]-width_and_height[1])) {
-                //Intent intent = new Intent(getBaseContext(), Blacksmith_tent.class);
-                //startActivity(intent);
+            if(tap && (tapx >= (center_bla[0]-width_and_height[0]) & tapx <= (width_and_height[0] + center_bla[0])) & (tapy >= (center_bla[1]-width_and_height[1]) & tapy <= (center_bla[1]+width_and_height[1]))) {
+                tap = false;
+                Intent intent = new Intent(getBaseContext(), Blacksmith_tent.class);
+                startActivity(intent);
             }
-            if(tapx <= Math.abs(center_res[0]-width_and_height[0]) & tapy <= Math.abs(center_res[1]-width_and_height[1])) {
+            if(tap && (tapx >= (center_res[0]-width_and_height[0]) & tapx <= (width_and_height[0] + center_res[0])) & (tapy >= (center_res[1]-width_and_height[1]) & tapy <= (center_res[1]+width_and_height[1]))) {
+                tap = false;
                 //Intent intent = new Intent(getBaseContext(), Trade_tent.class);
                 //startActivity(intent);
+            }
+            if(tap && (tapx >= (1.0/3) * getScreenWidth() & tapx <= (2.0/3) * getScreenWidth()) & (tapy > (5.0/7) * getScreenHeight())) {
+                tap = false;
+                MainActivity.player.setContext(App.getContext());
+                MainActivity.player.goOnQuest();
+                Intent intent = new Intent(getBaseContext(), Quest.class);
+                startActivity(intent);
             }
         }
 
@@ -131,6 +142,13 @@ public class Market extends AppCompatActivity {
                 ourHolder.unlockCanvasAndPost(canvas);
             }
 
+        }
+
+        public void startQuest() {
+            MainActivity.player.setContext(App.getContext());
+            MainActivity.player.goOnQuest();
+            Intent intent = new Intent(getBaseContext(), Quest.class);
+            startActivity(intent);
         }
 
         // If SimpleGameEngine Activity is paused/stopped

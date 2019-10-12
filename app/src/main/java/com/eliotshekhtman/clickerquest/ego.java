@@ -3,6 +3,8 @@ package com.eliotshekhtman.clickerquest;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+
 public class ego {
     public int health_total, health_instant, enhancements;
     public inventory inv;
@@ -111,6 +113,16 @@ public class ego {
         return true;
     }
 
+    public boolean upgrade(weapons w) {
+        double priceUpgrade = priceUpgrade(w);
+        if(inv.getGold() < priceUpgrade)
+            return false;
+        boolean didit = w.upgrade();
+        if(didit)
+            inv.addGold((-1) * priceUpgrade);
+        return true;
+    }
+
     public boolean upgradeActive() {
         double priceUpgrade = priceUpgrade(arms[activeWeapon]);
         if(inv.getGold() < priceUpgrade)
@@ -119,6 +131,37 @@ public class ego {
         if(didit)
             inv.addGold((-1) * priceUpgrade);
         return true;
+    }
+
+    public ArrayList<String> getArmsNames() {
+        ArrayList<String> armsNames = new ArrayList<String>();
+        for(weapons w: arms) {
+            if(w != null) armsNames.add(w.name);
+        }
+        for(weapons w: inv.getArms()) armsNames.add(w.name);
+        return armsNames;
+    }
+    public ArrayList<String> getArms() {
+        ArrayList<String> armsNames = new ArrayList<String>();
+        for(weapons w: arms) {
+            String s;
+            if(w != null) {
+                s = w.name + " Upgrades: " + w.getUpgradeNumber() + " Price: " + priceUpgrade(w);
+                armsNames.add(s);
+            }
+        }
+        for(weapons w: inv.getArms()) {
+            String s = w.name + " Upgrades: " + w.getUpgradeNumber() + " Price: " + priceUpgrade(w);
+            armsNames.add(s);
+        }
+        return armsNames;
+    }
+
+    public weapons getWeapon(String s) {
+        for(weapons w: arms) {
+            if(w.name.equals(s)) return w;
+        }
+        return inv.peekWeapon(s);
     }
 
     private void sortArms() {

@@ -17,10 +17,17 @@ public class inventory {
         arms.add(new stick(context));
     }
 
+    public ArrayList<weapons> getArms() { return arms; }
+
+    public weapons peekWeapon(String s) {
+        for(weapons w: arms)
+            if(w.name.equals(s)) return w;
+        return null;
+    }
+
     public weapons getWeapon(String s) {
-        int i = 0;
-        while(!arms.get(i).name.equals(s)) { i++; }
-        weapons w = arms.get(i); arms.remove(i);
+        weapons w = peekWeapon(s);
+        arms.remove(w);
         return w;
     }
 

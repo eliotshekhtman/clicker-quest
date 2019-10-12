@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         lstext.setText("LAST SCORE: " + player.getLatest_score() + "KILOMETERS");
     }
 
+    /*
     public void updateMarket( View view ) {
         saveGame();
         final TextView gtext = (TextView) findViewById(R.id.gtext);
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
         stext.setText(player.getSpeed() + " KM PER CLICK");
         hstext.setText("HIGHSCORE:  " + player.getHigh_score() + "KILOMETERS");
         lstext.setText("LAST SCORE: " + player.getLatest_score() + "KILOMETERS");
+    }*/
+
+    public void updateMarket(View view) {
+        Intent intent = new Intent(this, Market.class);
+        startActivity(intent);
     }
 
     public void startQuest( View view ) {

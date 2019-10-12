@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.eliotshekhtman.clickerquest.MainActivity"
-            android:label="Personal">
+            android:label="Clicker Quest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,6 +22,12 @@
         </activity>
         <activity android:name="com.eliotshekhtman.clickerquest.Market"
             android:label="Market">
+        </activity>
+        <activity android:name="com.eliotshekhtman.clickerquest.Enhancement_tent"
+            android:label="Enhancement tent">
+        </activity>
+        <activity android:name="com.eliotshekhtman.clickerquest.Blacksmith_tent"
+            android:label="Blacksmith tent">
         </activity>
         <activity android:name="com.eliotshekhtman.clickerquest.App"></activity>
     </application>
